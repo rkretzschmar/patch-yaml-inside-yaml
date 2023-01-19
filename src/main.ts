@@ -9,17 +9,24 @@ async function run(): Promise<void> {
     const yamlPath = core.getInput('yamlPath');
     const yamlInsideYamlPath = core.getInput('yamlInsideYamlPath');
     const newValue = core.getInput('newValue');
+
+    core.info(
+      `Patch ${yamlPath}.${yamlInsideYamlPath} of ${documentFile} with ${newValue}`,
+    );
+
     const fileContent = await readFile(documentFile);
     const document = parse(fileContent.toString());
 
-    const newYaml = await patch({
+    const patchedYaml = await patch({
       document,
       yamlPath,
       yamlInsideYamlPath,
       newValue,
     });
 
-    await writeFile(documentFile, stringify(newYaml));
+    await writeFile(documentFile, stringify(patchedYaml));
+
+    core.info(`Patched YAML:\n${patchedYaml}`);
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);
   }
