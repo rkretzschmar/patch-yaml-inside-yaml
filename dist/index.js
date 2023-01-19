@@ -36,8 +36,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
-const promises_1 = __nccwpck_require__(9225);
 const yaml_1 = __nccwpck_require__(5065);
+const promises_1 = __nccwpck_require__(9225);
 const patch_1 = __nccwpck_require__(2566);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -84,8 +84,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.patch = void 0;
 const fast_json_patch_1 = __nccwpck_require__(4076);
-const jsonpath_plus_1 = __nccwpck_require__(5229);
 const yaml_1 = __nccwpck_require__(5065);
+const jsonpath_plus_1 = __nccwpck_require__(5229);
 function patch(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const { document, yamlPath, yamlInsideYamlPath, newValue } = options;
