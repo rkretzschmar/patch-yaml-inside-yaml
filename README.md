@@ -19,12 +19,16 @@ level1:
 
 ## Usage
 
+### Input params
+
 | Input                | Type   | Required | Description                                                                                                                      |
 | -------------------- | ------ | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `documentFile`       | string | yes      | The path to the YAML file to be patched                                                                                          |
 | `yamlPath`           | string | yes      | The YAML path of the property to be patched, for example: `level1.level2.yamlInsideYaml`                                         |
 | `yamlInsideYamlPath` | string | no       | The optional YAML path of the property to be patched inside the stringified YAML at `yamlPath`, for example: `backend.image.tag` |
 | `newValue`           | any    | yes      | The new value                                                                                                                    |
+
+### Example:
 
 ```yaml
 jobs:
