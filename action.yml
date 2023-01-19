@@ -1,11 +1,19 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Patch properties of YAML content inside YAML files'
+description: 'Some properties in YAML files contain stringified YAML content. This github action can patch properties inside those YAML inside YAML'
+author: 'René Kretzschmar'
 inputs:
-  milliseconds: # change this
+  documentFile:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'The path to the YAML document file'
+  yamlPath:
+    required: true
+    description: 'The YAML path of the property to patch'
+  yamlInsideYamlPath:
+    required: false
+    description: 'The optional YAML path inside the YAML path of the property to patch'
+  newValue:
+    required: true
+    description: 'The new value'
 runs:
   using: 'node16'
   main: 'dist/index.js'

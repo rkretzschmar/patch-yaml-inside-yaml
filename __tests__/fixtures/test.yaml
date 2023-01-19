@@ -1,0 +1,7 @@
+level1:
+  level2:
+    yamlInsideYaml: |
+      backend:
+        image:
+          tag: "1.0.0"
+  primitive: "primitive value"  
