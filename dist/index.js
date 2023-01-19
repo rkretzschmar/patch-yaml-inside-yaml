@@ -46,7 +46,7 @@ function run() {
             const yamlPath = core.getInput('yamlPath');
             const yamlInsideYamlPath = core.getInput('yamlInsideYamlPath');
             const newValue = core.getInput('newValue');
-            core.info(`Patch ${yamlPath}.${yamlInsideYamlPath} of ${documentFile} with ${newValue}`);
+            core.info(`Patch "${yamlPath}${yamlInsideYamlPath ? '.' : ''}${yamlInsideYamlPath}" of file "${documentFile}" with "${newValue}"`);
             const fileContent = yield (0, promises_1.readFile)(documentFile);
             const document = (0, yaml_1.parse)(fileContent.toString());
             const patchedYaml = yield (0, patch_1.patch)({
@@ -56,7 +56,7 @@ function run() {
                 newValue,
             });
             yield (0, promises_1.writeFile)(documentFile, (0, yaml_1.stringify)(patchedYaml));
-            core.info(`Patched YAML:\n${patchedYaml}`);
+            core.info(`Patched YAML:\n${(0, yaml_1.stringify)(patchedYaml)}`);
         }
         catch (error) {
             if (error instanceof Error)
