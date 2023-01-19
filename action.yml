@@ -4,13 +4,13 @@ author: 'René Kretzschmar'
 inputs:
   documentFile:
     required: true
-    description: 'The path to the YAML document file'
+    description: 'The path to the YAML document file to be patched'
   yamlPath:
     required: true
-    description: 'The YAML path of the property to patch'
+    description: 'The YAML path of the property to be patched'
   yamlInsideYamlPath:
     required: false
-    description: 'The optional YAML path inside the YAML path of the property to patch'
+    description: 'The optional YAML path of the property to be patched inside the stringified YAML at `yamlPath`'
   newValue:
     required: true
     description: 'The new value'

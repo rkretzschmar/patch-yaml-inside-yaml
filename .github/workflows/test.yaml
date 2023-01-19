@@ -19,18 +19,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cp ./__tests__/fixtures/test.yaml ./test_.yaml
-      - uses: ./
+      - name: Copy test file to test location
+        run: cp ./__tests__/fixtures/test.yaml ./test_.yaml
+      - name: Patch YAML inside YAML in test file at test location
+        uses: ./
         with:
           documentFile: ./test_.yaml
           yamlPath: level1.level2.yamlInsideYaml
           yamlInsideYamlPath: backend.image.tag
           newValue: 1.1.0
-      - run: cat ./test_.yaml
-      - run: cp ./__tests__/fixtures/test.yaml ./test_.yaml
-      - uses: ./
+      - name: Show content of patched test file
+        run: cat ./test_.yaml
+      - name: Copy test file to test location
+        run: cp ./__tests__/fixtures/test.yaml ./test_.yaml
+      - name: Patch simple YAML in test file at test location
+        uses: ./
         with:
           documentFile: ./test_.yaml
           yamlPath: level1.primitive
           newValue: patched value
-      - run: cat ./test_.yaml
+      - name: Show content of patched test file
+        run: cat ./test_.yaml
