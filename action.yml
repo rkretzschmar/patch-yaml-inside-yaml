@@ -1,5 +1,5 @@
 name: 'Patch properties of YAML content inside YAML files'
-description: 'Some properties in YAML files contain stringified YAML content. This github action can patch properties inside those YAML inside YAML'
+description: 'This github action can patch properties of stringified YAML content inside YAML files'
 author: 'René Kretzschmar'
 inputs:
   documentFile:
@@ -17,3 +17,6 @@ inputs:
 runs:
   using: 'node16'
   main: 'dist/index.js'
+branding:
+  icon: align-justify
+  color: green
