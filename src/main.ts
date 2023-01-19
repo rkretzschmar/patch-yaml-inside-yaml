@@ -1,19 +1,28 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+import * as core from '@actions/core';
+import {parse, stringify} from 'yaml';
+import {readFile, writeFile} from 'fs/promises';
+import {patch} from './patch';
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const documentFile = core.getInput('documentFile');
+    const yamlPath = core.getInput('yamlPath');
+    const yamlInsideYamlPath = core.getInput('yamlInsideYamlPath');
+    const newValue = core.getInput('newValue');
+    const fileContent = await readFile(documentFile);
+    const document = parse(fileContent.toString());
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const newYaml = await patch({
+      document,
+      yamlPath,
+      yamlInsideYamlPath,
+      newValue,
+    });
 
-    core.setOutput('time', new Date().toTimeString())
+    await writeFile(documentFile, stringify(newYaml));
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    if (error instanceof Error) core.setFailed(error.message);
   }
 }
 
-run()
+run();
