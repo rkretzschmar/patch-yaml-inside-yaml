@@ -25,3 +25,17 @@ level1:
 | `yamlPath`           | string | yes      | The YAML path of the property to be patched, for example: `level1.level2.yamlInsideYaml`                                         |
 | `yamlInsideYamlPath` | string | no       | The optional YAML path of the property to be patched inside the stringified YAML at `yamlPath`, for example: `backend.image.tag` |
 | `newValue`           | any    | yes      | The new value                                                                                                                    |
+
+```yaml
+jobs:
+  deployToProduction:
+    steps:
+      - run: git clone https://argo-cd.example.com/orchestration.git
+      - name: Patch ArgoCD application manifest
+        uses: rkretzschmar/patch-yaml-inside-yaml@v1
+        with:
+          documentFile: ./production/application.yaml
+          yamlPath: spec.resources.helm.values
+          yamlInsideYamlPath: image.tag
+          newValue: 1.12.0
+```
