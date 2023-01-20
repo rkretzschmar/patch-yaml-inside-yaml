@@ -39,7 +39,7 @@ jobs:
         uses: rkretzschmar/patch-yaml-inside-yaml@v1
         with:
           documentFile: ./production/application.yaml
-          yamlPath: spec.resources.helm.values
+          yamlPath: spec.source.helm.values
           yamlInsideYamlPath: image.tag
           newValue: 1.12.0
 ```
