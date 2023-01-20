@@ -36,7 +36,7 @@ jobs:
     steps:
       - run: git clone https://argo-cd.example.com/orchestration.git
       - name: Patch ArgoCD application manifest
-        uses: rkretzschmar/patch-yaml-inside-yaml@v1
+        uses: rkretzschmar/patch-yaml-inside-yaml@v2
         with:
           documentFile: ./production/application.yaml
           yamlPath: spec.source.helm.values
