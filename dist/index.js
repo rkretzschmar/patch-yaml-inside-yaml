@@ -91,22 +91,30 @@ const jsonpath_plus_1 = __nccwpck_require__(5229);
 function patch(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const { document, yamlPath, yamlInsideYamlPath, newValue } = options;
+        // Json pointer for patchValue() while taking into account any array selection.
+        // For example: from spec.souces[?(@.var_a=='b')].value to /spec/sources/0/value
+        const pathPointer = (0, jsonpath_plus_1.JSONPath)({ path: yamlPath, json: document, resultType: 'pointer' })[0];
         if (yamlInsideYamlPath) {
-            const yamlPathValue = (0, jsonpath_plus_1.JSONPath)({ path: yamlPath, json: document })[0];
+            // This does the same as the pointer, but on a format that jsonpath likes...
+            const path = (0, jsonpath_plus_1.JSONPath)({ path: yamlPath, json: document, resultType: 'path' })[0];
+            // Get yaml inside yaml bit.${path}
+            const yamlPathValue = (0, jsonpath_plus_1.JSONPath)({ path: `${path}`, json: document })[0];
+            // Convert it to json/dictionary format.
             const yamlInsideYaml = (0, yaml_1.parse)(yamlPathValue);
-            const patchedYamlInsideYaml = patchValue(yamlInsideYaml, yamlInsideYamlPath, newValue);
-            return patchValue(document, yamlPath, (0, yaml_1.stringify)(patchedYamlInsideYaml));
+            // get pointer to change the yaml inside yaml.
+            const pathInsideYaml = (0, jsonpath_plus_1.JSONPath)({ path: yamlInsideYamlPath, json: yamlInsideYaml, resultType: 'pointer' })[0];
+            // Change the value to whatever we want.
+            const patchedYamlInsideYaml = patchValue(yamlInsideYaml, pathInsideYaml, newValue);
+            return patchValue(document, pathPointer, (0, yaml_1.stringify)(patchedYamlInsideYaml));
         }
-        else {
-            return patchValue(document, yamlPath, newValue);
-        }
+        return patchValue(document, pathPointer, newValue);
     });
 }
 exports.patch = patch;
 function patchValue(source, path, newValue) {
     const operation = {
         op: 'replace',
-        path: `/${path.replace(/\./g, '/')}`,
+        path: `${path}`,
         value: newValue,
     };
     return (0, fast_json_patch_1.applyOperation)(source, operation).newDocument;
