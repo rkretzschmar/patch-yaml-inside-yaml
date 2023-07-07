@@ -29,7 +29,7 @@ export async function patch(options: PatchOptions): Promise<object> {
       json: document,
       resultType: 'path',
     })[0];
-    // Get yaml inside yaml bit.${path}
+    // Get yaml inside yaml bit.
     const yamlPathValue = JSONPath({path: `${path}`, json: document})[0];
     // Convert it to json/dictionary format.
     const yamlInsideYaml = parse(yamlPathValue);

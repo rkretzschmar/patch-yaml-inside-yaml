@@ -105,7 +105,7 @@ function patch(options) {
                 json: document,
                 resultType: 'path',
             })[0];
-            // Get yaml inside yaml bit.${path}
+            // Get yaml inside yaml bit.
             const yamlPathValue = (0, jsonpath_plus_1.JSONPath)({ path: `${path}`, json: document })[0];
             // Convert it to json/dictionary format.
             const yamlInsideYaml = (0, yaml_1.parse)(yamlPathValue);

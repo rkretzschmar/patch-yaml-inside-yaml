@@ -1,5 +1,6 @@
 import {patch} from './patch';
 import {parse, stringify} from 'yaml';
+import {JSONPath} from 'jsonpath-plus';
 import {readFile} from 'fs/promises';
 
 describe('patch', () => {
@@ -66,7 +67,7 @@ describe('patch', () => {
     expect(patchedYaml).toEqual(expectedValue);
   });
 
-  it('patches simple YAML array value', async () => {
+  it('patches simple YAML array value with complex item selector', async () => {
     // ARRANGE
     let expectedValue = {
       ...document,
@@ -86,14 +87,14 @@ describe('patch', () => {
     // ACT
     const patchedYaml = await patch({
       document,
-      yamlPath: 'level1.array[0].tag',
+      yamlPath: "level1.array[?(@.app=='service_b')].tag",
       newValue: '1.1.0',
     });
 
     // ASSERT
     expect(patchedYaml).toEqual(expectedValue);
   });
-  it('patches YAML array with yaml inside yaml', async () => {
+  it('patches YAML array with complex item selector with yaml inside yaml', async () => {
     // ARRANGE
     let expectedValue = {
       ...document,
@@ -118,7 +119,8 @@ describe('patch', () => {
     // ACT
     const patchedYaml = await patch({
       document,
-      yamlPath: 'level1.array[1].anotherYamlInsideYaml',
+      yamlPath:
+        'level1.array[?(@.anotherYamlInsideYaml)].anotherYamlInsideYaml',
       yamlInsideYamlPath: 'service_c.image.tag',
       newValue: '1.1.0',
     });
@@ -126,7 +128,7 @@ describe('patch', () => {
     // ASSERT
     expect(patchedYaml).toEqual(expectedValue);
   });
-  it('patches YAML array with yaml inside yaml with array', async () => {
+  it('patches YAML array with complex item selector that yaml inside yaml with array', async () => {
     // ARRANGE
     let expectedValue = {
       ...document,
@@ -156,8 +158,9 @@ describe('patch', () => {
     // ACT
     const patchedYaml = await patch({
       document,
-      yamlPath: 'level1.array[2].anotherYamlInsideYamlArray',
-      yamlInsideYamlPath: 'apps[0].tag',
+      yamlPath:
+        'level1.array[?(@.anotherYamlInsideYamlArray)].anotherYamlInsideYamlArray',
+      yamlInsideYamlPath: "apps[?(@.app=='service_d')].tag",
       newValue: '1.1.0',
     });
 
