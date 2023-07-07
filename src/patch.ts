@@ -35,8 +35,8 @@ function patchValue(
 ): object {
   const operation: Operation = {
     op: 'replace',
-    path: `/${path.replace(/\./g, '/')}`,
+    path: `/${path.replace(/[[\]]/g, '').replace(/\./g, '/')}`,
     value: newValue,
   };
-  return applyOperation(source, operation).newDocument;
+  return applyOperation(source, operation, undefined, false).newDocument;
 }
