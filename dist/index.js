@@ -92,7 +92,7 @@ function patch(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const { document, yamlPath, yamlInsideYamlPath, newValue } = options;
         // Json pointer for patchValue() while taking into account any array selection.
-        // For example: from spec.souces[?(@.var_a=='b')].value to /spec/sources/0/value
+        // For example: from spec.sources[?(@.var_a=='b')].value to /spec/sources/0/value
         const pathPointer = (0, jsonpath_plus_1.JSONPath)({
             path: yamlPath,
             json: document,
