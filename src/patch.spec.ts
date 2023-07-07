@@ -1,6 +1,5 @@
 import {patch} from './patch';
 import {parse, stringify} from 'yaml';
-import {JSONPath} from 'jsonpath-plus';
 import {readFile} from 'fs/promises';
 
 describe('patch', () => {
