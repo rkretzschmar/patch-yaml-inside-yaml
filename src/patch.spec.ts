@@ -74,8 +74,8 @@ describe('patch', () => {
         ...document.level1,
         array: [
           {
-            app: "service_b",
-            tag: "1.1.0",
+            app: 'service_b',
+            tag: '1.1.0',
           },
           document.level1.array[1],
           document.level1.array[2],
@@ -87,7 +87,7 @@ describe('patch', () => {
     const patchedYaml = await patch({
       document,
       yamlPath: 'level1.array[0].tag',
-      newValue: "1.1.0",
+      newValue: '1.1.0',
     });
 
     // ASSERT
@@ -105,10 +105,10 @@ describe('patch', () => {
             anotherYamlInsideYaml: stringify({
               service_c: {
                 image: {
-                  tag: "1.1.0"
-                }
-              }
-            })
+                  tag: '1.1.0',
+                },
+              },
+            }),
           },
           document.level1.array[2],
         ],
@@ -120,7 +120,7 @@ describe('patch', () => {
       document,
       yamlPath: 'level1.array[1].anotherYamlInsideYaml',
       yamlInsideYamlPath: 'service_c.image.tag',
-      newValue: "1.1.0",
+      newValue: '1.1.0',
     });
 
     // ASSERT
@@ -139,15 +139,15 @@ describe('patch', () => {
             anotherYamlInsideYamlArray: stringify({
               apps: [
                 {
-                  app: "service_d",
-                  tag: "1.1.0",
+                  app: 'service_d',
+                  tag: '1.1.0',
                 },
                 {
-                  app: "service_e",
-                  tag: "1.0.0",
-                }
-              ]
-            })
+                  app: 'service_e',
+                  tag: '1.0.0',
+                },
+              ],
+            }),
           },
         ],
       },
@@ -158,7 +158,7 @@ describe('patch', () => {
       document,
       yamlPath: 'level1.array[2].anotherYamlInsideYamlArray',
       yamlInsideYamlPath: 'apps[0].tag',
-      newValue: "1.1.0",
+      newValue: '1.1.0',
     });
 
     // ASSERT
