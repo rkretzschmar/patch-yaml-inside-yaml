@@ -65,4 +65,105 @@ describe('patch', () => {
     // ASSERT
     expect(patchedYaml).toEqual(expectedValue);
   });
+
+  it('patches simple YAML array value with complex item selector', async () => {
+    // ARRANGE
+    let expectedValue = {
+      ...document,
+      level1: {
+        ...document.level1,
+        array: [
+          {
+            app: 'service_b',
+            tag: '1.1.0',
+          },
+          document.level1.array[1],
+          document.level1.array[2],
+        ],
+      },
+    };
+
+    // ACT
+    const patchedYaml = await patch({
+      document,
+      yamlPath: "level1.array[?(@.app=='service_b')].tag",
+      newValue: '1.1.0',
+    });
+
+    // ASSERT
+    expect(patchedYaml).toEqual(expectedValue);
+  });
+  it('patches YAML array with complex item selector with yaml inside yaml', async () => {
+    // ARRANGE
+    let expectedValue = {
+      ...document,
+      level1: {
+        ...document.level1,
+        array: [
+          document.level1.array[0],
+          {
+            anotherYamlInsideYaml: stringify({
+              service_c: {
+                image: {
+                  tag: '1.1.0',
+                },
+              },
+            }),
+          },
+          document.level1.array[2],
+        ],
+      },
+    };
+
+    // ACT
+    const patchedYaml = await patch({
+      document,
+      yamlPath:
+        'level1.array[?(@.anotherYamlInsideYaml)].anotherYamlInsideYaml',
+      yamlInsideYamlPath: 'service_c.image.tag',
+      newValue: '1.1.0',
+    });
+
+    // ASSERT
+    expect(patchedYaml).toEqual(expectedValue);
+  });
+  it('patches YAML array with complex item selector that yaml inside yaml with array', async () => {
+    // ARRANGE
+    let expectedValue = {
+      ...document,
+      level1: {
+        ...document.level1,
+        array: [
+          document.level1.array[0],
+          document.level1.array[1],
+          {
+            anotherYamlInsideYamlArray: stringify({
+              apps: [
+                {
+                  app: 'service_d',
+                  tag: '1.1.0',
+                },
+                {
+                  app: 'service_e',
+                  tag: '1.0.0',
+                },
+              ],
+            }),
+          },
+        ],
+      },
+    };
+
+    // ACT
+    const patchedYaml = await patch({
+      document,
+      yamlPath:
+        'level1.array[?(@.anotherYamlInsideYamlArray)].anotherYamlInsideYamlArray',
+      yamlInsideYamlPath: "apps[?(@.app=='service_d')].tag",
+      newValue: '1.1.0',
+    });
+
+    // ASSERT
+    expect(patchedYaml).toEqual(expectedValue);
+  });
 });

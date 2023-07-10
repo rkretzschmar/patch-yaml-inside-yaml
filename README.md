@@ -9,12 +9,34 @@ It is also able to patch properties of stringified YAML inside YAML files like t
 
 ```YAML
 level1:
+  primitive: "primitive value"
   level2:
     yamlInsideYaml: |
       backend:
         image:
           tag: "1.0.0"
-  primitive: "primitive value"
+    yamlInsideYamlArray: |
+      apps:
+        - app: service_a
+          tag: "1.0.0"
+        - app: frontend
+          tag: "1.0.0"
+  array:
+    - app: service_b
+      tag: "1.0.0"
+    - app: service_c
+      anotherYamlInsideYaml: |
+        service_d:
+          image:
+            tag: "1.0.0"
+    - app: service_e
+      anotherYamlInsideYamlArray: |
+        apps:
+          - app: service_f
+            tag: "1.0.0"
+          - app: service_g
+            tag: "1.0.0"
+    
 ```
 
 ## Usage
@@ -41,5 +63,20 @@ jobs:
           documentFile: ./production/application.yaml
           yamlPath: spec.source.helm.values
           yamlInsideYamlPath: image.tag
+          newValue: 1.12.0
+```
+
+#### With arrays
+```yaml
+jobs:
+  deployToProduction:
+    steps:
+      - run: git clone https://argo-cd.example.com/orchestration.git
+      - name: Patch ArgoCD application manifest
+        uses: rkretzschmar/patch-yaml-inside-yaml@v2
+        with:
+          documentFile: ./production/application.yaml
+          yamlPath: level1.array[?(@.app=='service_e')].anotherYamlInsideYamlArray
+          yamlInsideYamlPath: apps.[?(@.app=='service_f')].tag
           newValue: 1.12.0
 ```
